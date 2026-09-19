@@ -1,0 +1,9 @@
+<nav class="learning-path" aria-label="Module learning stages">
+<a href="{{ url_for('learn', number=module.id) }}#purpose">1 · Purpose</a>
+<a href="{{ url_for('learn', number=module.id) }}#explanation">2 · Understand</a>
+<a href="{{ url_for('learn', number=module.id) }}#resources">3 · Explore further</a>
+<a href="{{ url_for('learn', number=module.id) }}#understanding">4 · Check assumptions</a>
+<a href="{{ url_for('practice', number=module.id) }}">5 · Practice</a>
+<a href="{{ url_for('checkpoint', number=module.id) }}">6 · Teach it back</a>
+<a href="{{ url_for('notebook', module=module.id) }}">Research notebook</a>
+</nav>

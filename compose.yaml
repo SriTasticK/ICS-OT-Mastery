@@ -1,0 +1,57 @@
+services:
+  lab:
+    build: .
+    image: private-research-lab:local
+    container_name: private-research-lab
+    environment:
+      LAB_DATA: /data
+      LAB_HOSTS: localhost,127.0.0.1
+      LAB_REVIEW_MODE: structured
+    volumes:
+      - lab-data:/data
+    networks:
+      - lab-internal
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,noexec,nosuid
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 96
+    mem_limit: 512m
+    cpus: 2
+    restart: unless-stopped
+  gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    image: private-lab-gateway:local
+    container_name: private-lab-gateway
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      lab:
+        condition: service_healthy
+    networks:
+      - lab-ingress
+      - lab-internal
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,noexec,nosuid
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 64
+    mem_limit: 128m
+    restart: unless-stopped
+networks:
+  lab-ingress:
+    name: private-lab-ingress
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+  lab-internal:
+    name: private-lab-internal
+    internal: true
+volumes:
+  lab-data:
+    name: private-lab-data

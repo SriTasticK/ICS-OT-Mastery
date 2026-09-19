@@ -1,0 +1,15 @@
+.obsidian
+ICS.rep/
+ICS.lock~
+ICS.lock
+ICS.gpr
+
+# Private research lab runtime and local dependencies
+.venv/
+.lab-data/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+lab-backup-*.sqlite3
+artifacts/

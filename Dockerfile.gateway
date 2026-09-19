@@ -1,0 +1,5 @@
+FROM nginxinc/nginx-unprivileged@sha256:daa17b944bac2b578e962da4c61ad72a59233b3c63abea17113acaf4e6b9aea4
+COPY gateway/nginx.conf /etc/nginx/nginx.conf
+ENTRYPOINT ["nginx"]
+CMD ["-g", "daemon off;"]
+HEALTHCHECK --interval=10s --timeout=5s --start-period=5s --retries=3 CMD wget -q -O /dev/null http://127.0.0.1:8080/health || exit 1

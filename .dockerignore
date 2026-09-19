@@ -1,0 +1,11 @@
+*
+!Dockerfile
+!pyproject.toml
+!uv.lock
+!lab/
+!lab/**
+lab/__pycache__/
+lab/**/__pycache__/
+!Dockerfile.gateway
+!gateway/
+!gateway/**

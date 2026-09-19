@@ -1,0 +1,39 @@
+# Use only after loading the model with scripts/model-prepare.sh and verifying
+# NVIDIA Container Toolkit. No model API ports are published.
+services:
+  lab:
+    environment:
+      LAB_REVIEW_MODE: local-ai
+      LAB_REVIEW_URL: http://ollama:11434
+      LAB_REVIEW_MODEL: qwen3:4b-instruct-2507-q4_K_M
+    depends_on:
+      ollama:
+        condition: service_started
+  ollama:
+    image: ollama/ollama@sha256:2c9595c555fd70a28363489ac03bd5bf9e7c5bdf2890373c3a830ffd7252ce6d
+    container_name: private-lab-reviewer
+    devices:
+      - "nvidia.com/gpu=all"
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_NO_CLOUD: "1"
+      OLLAMA_CONTEXT_LENGTH: "4096"
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      OLLAMA_KEEP_ALIVE: 5m
+      OLLAMA_FLASH_ATTENTION: "1"
+      OLLAMA_KV_CACHE_TYPE: q8_0
+    volumes:
+      - model-data:/root/.ollama
+    networks:
+      - lab-internal
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 256
+    mem_limit: 6g
+    restart: unless-stopped
+volumes:
+  model-data:
+    name: private-lab-models

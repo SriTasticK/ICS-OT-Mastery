@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}{{ 'Create your workspace' if setup else 'Sign in' }}{% endblock %}
+{% block breadcrumb %}{{ 'FIRST RUN' if setup else 'SIGN IN' }}{% endblock %}
+{% block content %}
+<div class="auth-layout"><section>
+<p class="eyebrow">A PLACE TO BUILD UNDERSTANDING</p>
+<h1>Your private<br>research bench<span class="accent">.</span></h1>
+<p class="lead">From a pointer in C to a process in a plant. Learn the mechanics, challenge your mental model, and keep a record of what changed your mind.</p>
+<div class="principles"><div><b>01</b><span>Learn the system</span></div><div><b>02</b><span>Test your reasoning</span></div><div><b>03</b><span>Document the evidence</span></div></div>
+</section><section class="panel auth-panel">
+<p class="eyebrow">{{ 'ONE-TIME SETUP' if setup else 'WELCOME BACK' }}</p>
+<h2>{{ 'Make this space yours' if setup else 'Open your workspace' }}</h2>
+<form method="post"><input type="hidden" name="csrf" value="{{ csrf }}">
+{% if setup %}<label for="token">Setup token</label><input id="token" name="token" required autocomplete="off"><p class="field-help">Read <code>/data/setup-token</code> in the container, or <code>.lab-data/setup-token</code> for a local development run. This prevents someone else from claiming first setup.</p>{% endif %}
+<label for="password">{{ 'Create a password' if setup else 'Password' }}</label><input id="password" name="password" type="password" required minlength="{{ 12 if setup else 1 }}" maxlength="256" autocomplete="{{ 'new-password' if setup else 'current-password' }}">
+{% if setup %}<label for="confirm">Confirm password</label><input id="confirm" name="confirm" type="password" required minlength="12" maxlength="256" autocomplete="new-password"><p class="field-help">At least 12 characters. One private learner account.</p>{% endif %}
+<button class="button primary full" type="submit">{{ 'Create workspace' if setup else 'Sign in' }} <span>→</span></button>
+</form>
+<p class="fine-print">Lessons, attempts, and notebooks are stored in your local database. External reading links open only when you choose them.</p>
+</section></div>
+{% endblock %}
